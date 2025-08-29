@@ -3,8 +3,32 @@ import { motion } from "framer-motion";
 import { Check } from "lucide-react";
 import HeroCollage from "../assets/hero-collage.jpg";
 import { BRAND } from "../data/products";
+import emailjs from '@emailjs/browser';
 
 export default function Hero() {
+
+
+const sendNotifyEmail = (e) => {
+  e.preventDefault();
+
+  emailjs.sendForm(
+    "service_3vrbpo2",        // Your service ID
+    "template_x2namxn",       // You can use the same or create a new one
+    e.target,
+    "fe6Vrgx4uYqVIXe35"       // Your public key
+  )
+  .then(
+    (result) => {
+      alert("Thanks! We'll notify you at launch.");
+      e.target.reset();
+    },
+    (error) => {
+      alert("Oops! Something went wrong, please try again.");
+      console.error(error.text);
+    }
+  );
+};
+
   return (
     <section className="relative overflow-hidden">
       <div className={`absolute inset-0 -z-10 opacity-20 blur-3xl ${BRAND.gradient}`} />
@@ -25,30 +49,25 @@ export default function Hero() {
             We’re building our full e‑commerce experience. Meanwhile, browse a curated preview and
             subscribe to get launch offers.
           </p>
-          <form
-            className="mt-6 flex flex-col sm:flex-row gap-3"
-            onSubmit={(e) => {
-              e.preventDefault();
-              const fd = new FormData(e.currentTarget);
-              const email = fd.get("email");
-              alert(`Thanks! We'll notify ${email} at launch.`);
-              e.currentTarget.reset();
-            }}
-          >
-            <input
-              name="email"
-              required
-              type="email"
-              placeholder="Enter your email"
-              className="flex-1 rounded-2xl border px-4 py-3 shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
-            />
-            <button
-              type="submit"
-              className={`rounded-2xl px-6 py-3 text-white shadow-lg hover:opacity-95 transition ${BRAND.gradient}`}
-            >
-              Notify Me
-            </button>
-          </form>
+     <form
+  className="mt-6 flex flex-col sm:flex-row gap-3"
+  onSubmit={sendNotifyEmail}
+>
+  <input
+    name="user_email" // Must match variable in your template
+    required
+    type="email"
+    placeholder="Enter your email"
+    className="flex-1 rounded-2xl border px-4 py-3 shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+  />
+  <button
+    type="submit"
+    className={`rounded-2xl px-6 py-3 text-white shadow-lg hover:opacity-95 transition ${BRAND.gradient}`}
+  >
+    Notify Me
+  </button>
+</form>
+
           <div className="mt-6 flex items-center gap-6 text-sm text-gray-600">
             <div className="flex items-center gap-2"><Check className="w-4 h-4"/>Island‑wide delivery</div>
             <div className="flex items-center gap-2"><Check className="w-4 h-4"/>Warranty & support</div>

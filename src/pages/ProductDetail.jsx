@@ -3,12 +3,19 @@ import { useParams } from "react-router-dom";
 import { SAMPLE_PRODUCTS, formatLKR, BRAND } from "../data/products";
 import { ArrowLeft } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+
+// Inside your component
+
 
 export default function ProductDetail() {
   const { id } = useParams();
   const product = SAMPLE_PRODUCTS.find((p) => p.id === id);
-
+  const [selectedImage, setSelectedImage] = useState(product.gallery?.[0] || product.image);
+const navigate = useNavigate();
   if (!product) return <div className="text-center py-20">Product not found</div>;
+  
 
   return (
     <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -18,11 +25,29 @@ export default function ProductDetail() {
 
       <div className="grid md:grid-cols-2 gap-8">
         {/* Product Gallery */}
-        <div className="space-y-4">
-          <img src={product.image} alt={product.name} className="rounded-3xl border shadow-lg w-full" />
-          {/* Add more images if available */}
-          {/* Example: product.gallery.map(...) */}
-        </div>
+       <div className="space-y-4">
+    {/* Main large image */}
+    <img
+      src={selectedImage}
+      alt={product.name}
+      className="rounded-3xl border shadow-lg w-full object-cover h-96"
+    />
+
+    {/* Thumbnail images */}
+    <div className="flex gap-2">
+      {product.gallery?.map((img, idx) => (
+        <img
+          key={idx}
+          src={img}
+          alt={`${product.name} thumbnail ${idx + 1}`}
+          onClick={() => setSelectedImage(img)}
+          className={`h-20 w-20 object-cover rounded-xl border cursor-pointer ${
+            selectedImage === img ? "ring-2 ring-black" : "opacity-80 hover:opacity-100"
+          }`}
+        />
+      ))}
+    </div>
+  </div>
 
         {/* Product Info */}
         <div className="space-y-4">
@@ -34,22 +59,44 @@ export default function ProductDetail() {
             </div>
           )}
           <p className="text-gray-600 mt-4">
-            This is a sample description for <strong>{product.name}</strong>. You can add detailed features, specifications, and any promotional info here.
+            
+  <strong>{product.name}</strong>
+  <span className="ml-2">{product.description}</span>
+
+            
           </p>
 
           {/* Reviews */}
-          <div className="mt-6">
-            <h2 className="font-semibold text-lg mb-2">Reviews</h2>
-            <div className="space-y-2 text-sm text-gray-600">
-              <div>⭐ ⭐ ⭐ ⭐ ⭐ - Great product!</div>
-              <div>⭐ ⭐ ⭐ ⭐ - Very useful and durable.</div>
-            </div>
+         <div className="mt-6">
+  <h2 className="font-semibold text-lg mb-2">Reviews</h2>
+  <div className="space-y-4 text-sm text-gray-600">
+    {product.reviews && product.reviews.length > 0 ? (
+      product.reviews.map((review, index) => (
+        <div key={index} className="flex flex-col gap-1">
+          <div className="text-yellow-500">
+             <span className="text-gray-500 ml-2 font-medium">{review.user}</span>
+          <span className="ml-2">{"⭐".repeat(review.rating)}</span>
+
+           
           </div>
+          <div>{review.comment}</div>
+        </div>
+      ))
+    ) : (
+      <div>No reviews yet.</div>
+    )}
+  </div>
+</div>
+
 
           {/* Add to cart button */}
           <button
             className={`mt-6 w-full rounded-2xl px-5 py-3 text-white ${BRAND.gradient} shadow-lg`}
-            onClick={() => alert("Add to cart functionality coming soon!")}
+            onClick={() => {
+  alert("Checkout is coming soon! Contact Us For Orders");
+  navigate("/contact");
+}}
+
           >
             Add to Cart
           </button>

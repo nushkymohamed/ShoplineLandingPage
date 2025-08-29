@@ -3,12 +3,17 @@ import { motion } from "framer-motion";
 import { ShoppingCart, Trash2, Check, ArrowRight } from "lucide-react";
 import { SAMPLE_PRODUCTS, formatLKR, BRAND } from "../data/products";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+
+// Inside your component
 
 export default function Products() {
   const [cart, setCart] = useState({}); // {productId: qty}
   const [cartOpen, setCartOpen] = useState(false);
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState("All");
+const navigate = useNavigate();
+
 
   const categories = useMemo(
     () => ["All", ...Array.from(new Set(SAMPLE_PRODUCTS.map((p) => p.category)))],
@@ -166,11 +171,14 @@ export default function Products() {
                 <span>Subtotal</span>
                 <span>{formatLKR(subtotal)}</span>
               </div>
-              <button
-                disabled={Object.keys(cart).length === 0}
-                className={`mt-4 w-full rounded-2xl px-5 py-3 text-white ${BRAND.gradient} shadow-lg `}
-                onClick={() => alert("Checkout is coming soon! Contact 0777 804 789 For Orders")}
-              >
+             <button
+  disabled={Object.keys(cart).length === 0}
+  className={`mt-4 w-full rounded-2xl px-5 py-3 text-white ${BRAND.gradient} shadow-lg`}
+          onClick={() => {
+  alert("Checkout is coming soon! Contact Us For Orders");
+  navigate("/contact");
+}} // <-- Redirect to Contact Us
+>
                 Checkout
               </button>
               <div className="mt-2 text-[11px] text-gray-500">
