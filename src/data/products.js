@@ -21,7 +21,7 @@ export const SAMPLE_PRODUCTS = [
     badge: "Best Seller",
     image: Gascooker4Burner,
     category: "Kitchen",
-    gallery: [Gascooker4Burner, LEDTV, FAN , Kettle ,Oven],
+    gallery: [Gascooker4Burner, LEDTV, FAN , Kettle ,Oven ,AC],
     description: "This gas cooker features 4 powerful burners for efficient and even cooking. Ideal for large families and those who love to cook.",
     reviews: [
       { user: "Nimal", rating: 5, comment: "Cooks fast and evenly. Great build quality!" },
