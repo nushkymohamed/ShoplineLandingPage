@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+
 // Inside your component
 
 
@@ -14,6 +15,7 @@ export default function ProductDetail() {
   const product = SAMPLE_PRODUCTS.find((p) => p.id === id);
   const [selectedImage, setSelectedImage] = useState(product.gallery?.[0] || product.image);
 const navigate = useNavigate();
+
   if (!product) return <div className="text-center py-20">Product not found</div>;
   
 
@@ -25,29 +27,36 @@ const navigate = useNavigate();
 
       <div className="grid md:grid-cols-2 gap-8">
         {/* Product Gallery */}
-       <div className="space-y-4">
-    {/* Main large image */}
-    <img
-      src={selectedImage}
-      alt={product.name}
-      className="rounded-3xl border shadow-lg w-full object-cover h-96"
-    />
+ <div className="space-y-4">
+  {/* Main large image */}
+  <img
+    src={selectedImage}
+    alt={product.name}
+    className="rounded-3xl border shadow-lg w-full object-cover h-96"
+  />
 
-    {/* Thumbnail images */}
-    <div className="flex gap-2">
-      {product.gallery?.map((img, idx) => (
+  {/* Scrollable thumbnail row with ring-safe containers */}
+  <div className="flex gap-2 overflow-x-auto flex-nowrap pb-2">
+    {product.gallery?.map((img, idx) => (
+      <div
+        key={idx}
+        className="p-1 rounded-xl flex-shrink-0" // Container padding for ring space
+      >
         <img
-          key={idx}
           src={img}
           alt={`${product.name} thumbnail ${idx + 1}`}
           onClick={() => setSelectedImage(img)}
-          className={`h-20 w-20 object-cover rounded-xl border cursor-pointer ${
-            selectedImage === img ? "ring-2 ring-black" : "opacity-80 hover:opacity-100"
-          }`}
+          className={`h-20 w-20 object-cover rounded-xl border cursor-pointer transition
+            ${selectedImage === img
+              ? "ring-2 ring-black"
+              : "opacity-80 hover:opacity-100"
+            }`}
         />
-      ))}
-    </div>
+      </div>
+    ))}
   </div>
+</div>
+
 
         {/* Product Info */}
         <div className="space-y-4">
